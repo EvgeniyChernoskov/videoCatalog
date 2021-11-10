@@ -6,6 +6,7 @@ require (
 	github.com/gin-gonic/gin v1.7.4
 	github.com/joho/godotenv v1.4.0
 	github.com/lib/pq v1.10.3
+	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/spf13/viper v1.9.0
 	go.uber.org/zap v1.17.0
 )
@@ -39,6 +40,5 @@ require (
 	golang.org/x/text v0.3.7 // indirect
 	google.golang.org/protobuf v1.27.1 // indirect
 	gopkg.in/ini.v1 v1.63.2 // indirect
-	gopkg.in/natefinch/lumberjack.v2 v2.0.0 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
