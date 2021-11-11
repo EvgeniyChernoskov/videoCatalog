@@ -1,9 +1,8 @@
-package driver
+package repository
 
 import (
 	"database/sql"
 	"fmt"
-	"github.com/EvgeniyChernoskov/videoCatalog/log"
 	"github.com/spf13/viper"
 	"os"
 )
@@ -16,7 +15,7 @@ type Config struct {
 	Password string
 }
 
-func ConnectDB() *sql.DB {
+func ConnectDB() (*sql.DB,error) {
 
 	config := Config{
 		DBName:   viper.GetString("db.dbname"),
@@ -28,16 +27,16 @@ func ConnectDB() *sql.DB {
 
 	psqlConn := fmt.Sprintf("host=%s port=%s user=%s dbname=%s sslmode=%s password=%s",
 		config.Host, config.Port, config.User, config.DBName, config.SSLMode, config.Password)
-	db, err := sql.Open("postgres", psqlConn)
 
+	db, err := sql.Open("postgres", psqlConn)
 	if err != nil {
-		log.Logger.Fatal(err)
+		return nil,err
 	}
 
 	if err := db.Ping(); err != nil {
-		log.Logger.Fatal(err)
+		return nil,err
 	}
-	return db
+	return db,nil
 }
 
 

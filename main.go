@@ -1,37 +1,54 @@
 package main
 
 import (
-	"github.com/EvgeniyChernoskov/videoCatalog/controllers"
-	"github.com/EvgeniyChernoskov/videoCatalog/driver"
 	"github.com/EvgeniyChernoskov/videoCatalog/log"
-	"github.com/EvgeniyChernoskov/videoCatalog/repository"
+	"github.com/EvgeniyChernoskov/videoCatalog/pkg/controllers"
+	"github.com/EvgeniyChernoskov/videoCatalog/pkg/repository"
 	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/spf13/viper"
+	"os"
+	"os/signal"
+	"syscall"
 )
 
 func init() {
 	log.InitLogger()
 	InitConfig()
 	initEnv()
+	gin.SetMode(gin.ReleaseMode)
 }
 
 func main() {
-	defer log.Logger.Sync()
 
-	db := driver.ConnectDB()
-	defer db.Close()
+	db, err := repository.ConnectDB()
+	if err!=nil {
+		log.Logger.Fatal(err)
+	}
 
-	c :=controllers.New(repository.New(db))
+	repo := repository.New(db)
+	ctrl := controllers.New(repo)
 
-	r := gin.Default()
-	r.GET("/videos", c.GetVideos())
-	r.GET("/videos/:id", c.GetVideo())
-	r.POST("/videos/", c.AddVideo())
-	r.PUT("/videos/", c.UpdateVideo())
-	r.DELETE("/videos/:id", c.DeleteVideo())
-	r.Run()
+	go func() {
+		r := gin.Default()
+		r.GET("/videos", ctrl.GetVideos())
+		r.GET("/videos/:id", ctrl.GetVideo())
+		r.POST("/videos/", ctrl.AddVideo())
+		r.PUT("/videos/", ctrl.UpdateVideo())
+		r.DELETE("/videos/:id", ctrl.DeleteVideo())
+		r.Run()
+	}()
+
+	log.Logger.Info("start app")
+
+	quit := make(chan os.Signal, 1)
+	signal.Notify(quit, syscall.SIGTERM, syscall.SIGINT)
+
+	<-quit
+	log.Logger.Info("shutdown app")
+	db.Close()
+	log.Logger.Sync()
 
 }
 

@@ -2,15 +2,15 @@ package repository
 
 import (
 	"database/sql"
-	"github.com/EvgeniyChernoskov/videoCatalog/models"
+	"github.com/EvgeniyChernoskov/videoCatalog/pkg/models"
 )
 
 
 type VideoRepository struct {
 	db *sql.DB
 }
-func New(db *sql.DB) VideoRepository{
-	return VideoRepository{db:db}
+func New(db *sql.DB) VideoRepository {
+	return VideoRepository{db: db}
 }
 
 func (r VideoRepository) GetVideos() ([]models.Video, error) {

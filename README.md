@@ -1,6 +1,6 @@
-#CRUD application providing Web API data
+# CRUD application providing Web API data
 
-##Description 
+## Description 
 
 Storing records in the database
 
@@ -23,13 +23,12 @@ url         VARCHAR(255) NOT NULL
 ```
 go run main.go
 ```
-####Remark:
-Logging to file: video.log
+
 
 ## API
 
 
-###POST /videos
+### POST /videos
 Creates new record
 
 ##### Example Input:

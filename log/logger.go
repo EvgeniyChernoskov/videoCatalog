@@ -1,9 +1,9 @@
 package log
 
 import (
-	"github.com/natefinch/lumberjack"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
+	"os"
 )
 
 var Logger *zap.SugaredLogger
@@ -24,14 +24,13 @@ func getEncoder() zapcore.Encoder {
 }
 
 func getLogWriter() zapcore.WriteSyncer {
-	lumberJackLogger := &lumberjack.Logger{
-		Filename:   "./video.log",
-		MaxSize:    5,
-		MaxBackups: 5,
-		MaxAge:     30,
-		Compress:   false,
-	}
-	return zapcore.AddSync(lumberJackLogger)
-	//file, _ := os.Create("./test.log")
-	//return zapcore.AddSync(file)
+	return zapcore.AddSync(os.Stdout)
+	//return zapcore.AddSync(&lumberjack.Logger{
+	//	Filename:   "./video.log",
+	//	MaxSize:    5,
+	//	MaxBackups: 5,
+	//	MaxAge:     30,
+	//	Compress:   false,
+	//})
+
 }

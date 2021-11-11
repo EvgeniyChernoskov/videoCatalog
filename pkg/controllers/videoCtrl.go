@@ -3,8 +3,8 @@ package controllers
 import (
 	"errors"
 	"github.com/EvgeniyChernoskov/videoCatalog/log"
-	"github.com/EvgeniyChernoskov/videoCatalog/models"
-	"github.com/EvgeniyChernoskov/videoCatalog/repository"
+	"github.com/EvgeniyChernoskov/videoCatalog/pkg/models"
+	"github.com/EvgeniyChernoskov/videoCatalog/pkg/repository"
 	"github.com/gin-gonic/gin"
 	"net/http"
 	"strconv"
